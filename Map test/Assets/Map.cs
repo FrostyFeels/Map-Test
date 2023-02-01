@@ -9,6 +9,7 @@ using System;
 [Serializable]
 public class MapHolder
 {
+    public Vector2 holderSize;
     public Vector3 mapSize;
     public int tileSize;
 
@@ -18,14 +19,25 @@ public class MapHolder
     //Then calls create layers
     public void CreateMap()
     {
+        int row = 0;
+        int colum = 0;
+
         foreach (Map _Map in maps)
         {
+            _Map.gridspot = new Vector2(row, colum);
             for (int x = 0; x < mapSize.y; x++)
             {
                 _Map.layers.Add(new Layer());
             }
             _Map.height = _Map.layers.Count;
-            _Map.CreateLayer(mapSize);           
+            _Map.CreateLayer(mapSize);
+
+            row++;
+            if (row >= holderSize.y)
+            {
+                row = 0;
+                colum++;
+            }              
         }
     }
 }
@@ -39,6 +51,7 @@ public class MapHolder
 [Serializable]
 public class Map
 {
+    public Vector2 gridspot;
     public Tile[,,] mapData;
 
     public int height;
@@ -66,6 +79,14 @@ public class Map
             count++;
         }
     }
+
+    public void HideMap(bool hide)
+    {
+        foreach (Layer _Layer in layers)
+        {
+            _Layer.ChangeVisibility(hide, hide);
+        }
+    }
 }
 
 
@@ -86,14 +107,17 @@ public class Layer
             if(setting)
             {
                 _tile.obj.SetActive(setting);
-                BuildLogic.ChangeColor(Color.white, _tile.renderer);
+                if(_tile.selected)
+                    BuildLogic.ChangeColor("White", _tile.renderer);
+                else
+                    BuildLogic.ChangeColor("UnSelected", _tile.renderer);
             }
 
             if(!setting)
             {
                 if(_tile.selected && keepFilled)
                 {
-                    BuildLogic.ChangeColor(Color.black, _tile.renderer);
+                    BuildLogic.ChangeColor("Black", _tile.renderer);
                 }
                 else
                 {
@@ -112,6 +136,7 @@ public class Tile
     public Vector3 pos;
     public bool selected;
     public bool edgeTile;
+    public bool stoodOn;
 
     public GameObject obj;
     public Renderer renderer;

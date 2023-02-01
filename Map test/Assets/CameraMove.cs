@@ -41,18 +41,37 @@ public class CameraMove : MonoBehaviour
             transform.localPosition -= direction * Time.deltaTime * speed;
 
 
+
     }
 
 
     public void CameraRotation()
     {
+        float oldDistance = distanceFromCamera;
 
-        distanceFromCamera += Input.mouseScrollDelta.y;
+        distanceFromCamera += Input.mouseScrollDelta.y * scrollSpeed;
+
+        if (oldDistance != distanceFromCamera)
+        {
+            previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+            Vector3 direction = previousPosition - cam.ScreenToViewportPoint(Input.mousePosition);
+
+            cam.transform.position = target.transform.position;
+
+            cam.transform.Rotate(new Vector3(0, 1, 0), -direction.x * 180, Space.World);
+            cam.transform.Rotate(new Vector3(1, 0, 0), direction.y * 180);
+            cam.transform.Translate(new Vector3(0, 0, distanceFromCamera));
+
+            previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+        }
+
 
         if (Input.GetMouseButtonDown(1))
         {
             previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
         }
+
+
 
         if (Input.GetMouseButton(1))
         {

@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 377528840}
   - component: {fileID: 377528839}
   - component: {fileID: 377528841}
+  - component: {fileID: 377528842}
   m_Layer: 0
   m_Name: Map object
   m_TagString: Untagged
@@ -291,18 +292,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   info: {fileID: 377528840}
   cam: {fileID: 523673740}
-  map:
-    mapSize: {x: 25, y: 2, z: 25}
-    tileSize: 1
-    maps:
-    - height: 0
-      layers: []
-  save: {fileID: 0}
+  save: {fileID: 1477338463}
+  view: {fileID: 377528839}
+  select: {fileID: 377528842}
   mapHolder: {fileID: 1477338461}
-  tilePrefab: {fileID: 6588644837663541923, guid: 164b7a2b54ca22e4ba3477ea0a71217b,
+  tilePrefab: {fileID: 7760452764040150881, guid: 164b7a2b54ca22e4ba3477ea0a71217b,
+    type: 3}
+  mapSelectPrefab: {fileID: 1971378581963257697, guid: d4d1b920ba8469845b706fd374dfc77f,
     type: 3}
   mapName: OwO
-  alphaValue: 0.1
+  map:
+    holderSize: {x: 2, y: 2}
+    mapSize: {x: 25, y: 2, z: 25}
+    tileSize: 1
+    maps: []
 --- !u!114 &377528839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,11 +321,6 @@ MonoBehaviour:
   info: {fileID: 377528840}
   currentLevel: 0
   visibleMaps: []
-  map:
-    mapSize: {x: 0, y: 0, z: 0}
-    tileSize: 0
-    maps: []
-  alphaValue: 0.1
 --- !u!114 &377528840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,9 +334,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map:
+    holderSize: {x: 0, y: 0}
     mapSize: {x: 3, y: 2, z: 3}
     tileSize: 1
     maps: []
+  currentMap:
+    gridspot: {x: 0, y: 0}
+    height: 0
+    layers: []
 --- !u!114 &377528841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,13 +359,37 @@ MonoBehaviour:
   tileMask:
     serializedVersion: 2
     m_Bits: 64
-  visibleMaps:
+  curMap:
+    gridspot: {x: 0, y: 0}
     height: 0
     layers: []
   startTile: {x: -5, y: -5, z: -5}
   endTile: {x: -5, y: -5, z: -5}
   choseTile: 0
   selectedTiles: []
+--- !u!114 &377528842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377528835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc739546aef1fea4898266ab3eef3988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info: {fileID: 377528840}
+  viewer: {fileID: 377528839}
+  holder:
+    holderSize: {x: 0, y: 0}
+    mapSize: {x: 0, y: 0, z: 0}
+    tileSize: 0
+    maps: []
+  selectBoxes: []
+  maps:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map:
+    holderSize: {x: 0, y: 0}
     mapSize: {x: 0, y: 0, z: 0}
     tileSize: 0
     maps: []
+  move: {fileID: 523673740}

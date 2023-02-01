@@ -9,7 +9,7 @@ public class MapEditor : MonoBehaviour
     
 
     [SerializeField] LayerMask tileMask;
-    public Map visibleMaps;
+    public Map curMap;
 
     public Vector3 startTile, endTile;
     public bool choseTile;
@@ -25,7 +25,7 @@ public class MapEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0) && info.currentMap.layers.Count != 0)
         {
             MapSelecter();
         }
@@ -59,27 +59,34 @@ public class MapEditor : MonoBehaviour
     }
     public void Build()
     {
-        visibleMaps = info.map.maps[0];
         
         Vector3[] startEnd = BuildLogic. GetStart(startTile, endTile);
 
         Vector3 start = startEnd[0];
         Vector3 end = startEnd[1];
 
-        BuildTiles(BuildLogic.GetEdges(start, end, visibleMaps.mapData, viewer.currentLevel));
-        BuildTiles(BuildLogic.GetMiddle(start, end, visibleMaps.mapData, viewer.currentLevel));
+
+        curMap = BuildLogic.GetMap(start, info.map);
+        start = BuildLogic.GetID(start, info.map);
+        end = BuildLogic.GetID(end, info.map);
+
+      
+
+        Debug.Log(curMap.gridspot);
+
+        BuildTiles(BuildLogic.GetEdges(start, end, curMap.mapData, viewer.currentLevel));
+        BuildTiles(BuildLogic.GetMiddle(start, end, curMap.mapData, viewer.currentLevel));
 
 
     }
     public void BuildTiles(List<Tile> dataList)
     {
-        Debug.Log(dataList.Count);
 
         foreach (Tile _Tile in dataList)
         {
             selectedTiles.Add(_Tile);
             _Tile.selected = true;
-            BuildLogic.ChangeAlpha(1, _Tile.renderer);
+            BuildLogic.ChangeColor("White", _Tile.renderer);
         }
     }
     public void RedoBuildTiles()
@@ -87,7 +94,7 @@ public class MapEditor : MonoBehaviour
         foreach (Tile _Tile in selectedTiles)
         {
             _Tile.selected = !_Tile.selected;
-            BuildLogic.ChangeAlpha(.33f, _Tile.renderer);
+            BuildLogic.ChangeColor("UnSelected", _Tile.renderer);
         }
         selectedTiles.Clear();
     }

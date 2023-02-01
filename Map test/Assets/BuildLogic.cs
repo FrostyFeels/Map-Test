@@ -4,18 +4,24 @@ using UnityEngine;
 
 public static class BuildLogic
 {
-    public static void ChangeAlpha(float colorIndex, Renderer renderer)
+    public static void ChangeColor(string matName, Renderer render)
     {
-        Color color = renderer.material.color;
-        color.a = colorIndex;
-
-        renderer.material.color = color;
-    } 
-    public static void ChangeColor(Color color, Renderer render)
-    {
-        render.material.color = color;
+        Material material = GetMaterial(matName);
+        render.material = material;
     }
-
+    public static void ChangeColor(string matName, Renderer[] render)
+    {
+        Material material = GetMaterial(matName);
+        foreach (Renderer _Render in render)
+        {
+            _Render.material = material;
+        }
+    }
+    public static Material GetMaterial(string matName)
+    {
+        Material material = Resources.Load<Material>("Materials/" + matName);
+        return material;
+    }
     public static TileStats OnTileSelect(int layers)
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -27,6 +33,19 @@ public static class BuildLogic
         }
         else
             return null;
+    }
+    public static Vector3 GetID(Vector3 id, MapHolder map)
+    {
+        Vector3 newID = new Vector3(id.x % map.mapSize.x, id.y, id.z % map.mapSize.z);
+        return newID;
+    }
+    public static Map GetMap(Vector3 id, MapHolder map) 
+    {
+        Vector2 mapIndex = new Vector2((int)(id.x / map.mapSize.x), (int)(id.z / map.mapSize.z));
+
+        Debug.Log(mapIndex);
+        Map _Map = map.maps[(int)(mapIndex.x + (map.holderSize.x * mapIndex.y))];
+        return _Map;
     }
     public static Vector3[] GetStart(Vector3 start, Vector3 end)
     {
@@ -81,7 +100,6 @@ public static class BuildLogic
         {
             for (int x = (int)start.x; x <= end.x; x++)
             {
-                Debug.Log("x " + x + " y " + height + " z " + z);
                 data = list[x, height, z];
                 if (((x == start.x || x == end.x) || (z == start.z || z == end.z)))
                 {

@@ -7,8 +7,6 @@ public class MapViewer : MonoBehaviour
     public MapInfo info;
     public int currentLevel;
     public List<Map> visibleMaps = new List<Map>();
-    public MapHolder map;
-    public float alphaValue;
 
 
     public void Update()
@@ -23,7 +21,6 @@ public class MapViewer : MonoBehaviour
     public void ChangeLevel(int increase)
     {
         int highestHight = 0;
-        map = info.map;
         visibleMaps = info.map.maps; //Make this changed in the world by clicking maps
 
         foreach (Map _Map in visibleMaps)
@@ -65,7 +62,7 @@ public class MapViewer : MonoBehaviour
                 {
                     Debug.Log("runs");
                     if (!_Tile.selected)
-                        BuildLogic.ChangeAlpha(alphaValue, _Tile.renderer);
+                        BuildLogic.ChangeColor("UnSelected", _Tile.renderer);
                 }
             }
         }
