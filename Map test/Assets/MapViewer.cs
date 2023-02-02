@@ -6,24 +6,33 @@ public class MapViewer : MonoBehaviour
 {
     public MapInfo info;
     public int currentLevel;
-    public List<Map> visibleMaps = new List<Map>();
 
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            ChangeLevel(-1);
+            ChangeLevel(-1, PrepareMaps(info.currentMap));
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            ChangeLevel(1);
+            ChangeLevel(1, PrepareMaps(info.currentMap));
     }
 
-    public void ChangeLevel(int increase)
+    public List<Map> PrepareMaps(Map map)
+    {
+        List<Map> _Map = new List<Map>();
+        _Map.Add(map);
+        return _Map;
+    }
+    public List<Map> PrepareMaps(List<Map> maps)
+    {
+        return maps;
+    }
+
+    public void ChangeLevel(int increase, List<Map> maps)
     {
         int highestHight = 0;
-        visibleMaps = info.map.maps; //Make this changed in the world by clicking maps
 
-        foreach (Map _Map in visibleMaps)
+        foreach (Map _Map in maps)
         {
             if (_Map.height > currentLevel)
                 if(increase > 0)
@@ -43,24 +52,22 @@ public class MapViewer : MonoBehaviour
         if(currentLevel + increase >= 0 && (highestHight > currentLevel + increase))
             currentLevel += increase;
 
-        foreach (Map _Map in visibleMaps)
+        foreach (Map _Map in maps)
         {
             if (_Map.height > currentLevel)
                 _Map.layers[currentLevel].ChangeVisibility(true, true);
         }
 
-        ChangeVisibility();
-        
+        ChangeVisibility(maps);    
     }    
-    public void ChangeVisibility()
+    public void ChangeVisibility(List<Map> maps)
     {
-        foreach (Map _Map in visibleMaps)
+        foreach (Map _Map in maps)
         {
             foreach (Layer _Layer in _Map.layers)
             {
                 foreach (Tile _Tile in _Layer.tiles)
                 {
-                    Debug.Log("runs");
                     if (!_Tile.selected)
                         BuildLogic.ChangeColor("UnSelected", _Tile.renderer);
                 }

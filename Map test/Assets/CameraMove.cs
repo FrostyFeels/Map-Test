@@ -16,13 +16,15 @@ public class CameraMove : MonoBehaviour
 
     public void Start()
     {
+        //sets the camera on the right distance from the map
         cam.transform.Translate(new Vector3(0, 0, distanceFromCamera));
     }
 
 
     void Update()
     {
-
+        //Gets the transform the position and calculates the angle for direction.
+        //This codes makes it possible for the map to turn the same way no matter the angle
         Transform camTransform = Camera.main.transform;
         Vector3 camPosition = new Vector3(camTransform.position.x, transform.position.y, camTransform.position.z);
         Vector3 direction = (transform.position - camPosition).normalized;
@@ -45,12 +47,16 @@ public class CameraMove : MonoBehaviour
     }
 
 
+    //Changes the camera position and rotation based on whenever the scroll has changed or when the mouse button is being held down
     public void CameraRotation()
     {
         float oldDistance = distanceFromCamera;
 
         distanceFromCamera += Input.mouseScrollDelta.y * scrollSpeed;
 
+
+        //Rotates based on distancefromCamera
+        //The previousposition is saved at start so that it wont change
         if (oldDistance != distanceFromCamera)
         {
             previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
@@ -65,14 +71,14 @@ public class CameraMove : MonoBehaviour
             previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
         }
 
-
+        //Holds the previous position for the first time when pressed
         if (Input.GetMouseButtonDown(1))
         {
             previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
         }
 
 
-
+        //Rotates based on previous and current position
         if (Input.GetMouseButton(1))
         {
             Vector3 direction = previousPosition - cam.ScreenToViewportPoint(Input.mousePosition);

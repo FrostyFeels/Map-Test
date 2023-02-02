@@ -33,7 +33,7 @@ public class MapHolder
             _Map.CreateLayer(mapSize);
 
             row++;
-            if (row >= holderSize.y)
+            if (row >= holderSize.x)
             {
                 row = 0;
                 colum++;
@@ -64,7 +64,6 @@ public class Map
         int count = 0;
         foreach (Layer _layer in layers)
         {
-            Debug.Log('2');
             for (int z = 0; z < mapsize.z; z++)
             {
                 for (int x = 0; x < mapsize.x; x++)
@@ -72,14 +71,12 @@ public class Map
                     _layer.layerIndex = count;
                     Tile tile = new Tile();
                     tile.pos = new Vector3(x, count, z);
-                    _layer.tiles.Add(tile);
-          
+                    _layer.tiles.Add(tile);       
                 }
             }
             count++;
         }
     }
-
     public void HideMap(bool hide)
     {
         foreach (Layer _Layer in layers)
@@ -140,4 +137,5 @@ public class Tile
 
     public GameObject obj;
     public Renderer renderer;
+    public BoxCollider collider;
 }

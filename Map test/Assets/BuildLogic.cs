@@ -4,24 +4,29 @@ using UnityEngine;
 
 public static class BuildLogic
 {
+    //This is 2 functions which will get the material from resources and give a renderer change the color of a object
     public static void ChangeColor(string matName, Renderer render)
     {
         Material material = GetMaterial(matName);
         render.material = material;
     }
-    public static void ChangeColor(string matName, Renderer[] render)
+    public static void ChangeColor(string matName, List<Tile> tiles)
     {
         Material material = GetMaterial(matName);
-        foreach (Renderer _Render in render)
+        foreach (Tile _Tile in tiles)
         {
-            _Render.material = material;
+            _Tile.renderer.material = material;
         }
     }
+
+    //Gets the Material from the resources list based on name
     public static Material GetMaterial(string matName)
     {
         Material material = Resources.Load<Material>("Materials/" + matName);
         return material;
     }
+
+    //Selects a tile based on the layer used
     public static TileStats OnTileSelect(int layers)
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -34,11 +39,15 @@ public static class BuildLogic
         else
             return null;
     }
+
+    //This functions is used to get the id between a value of mapsize.x and mapsize.y
     public static Vector3 GetID(Vector3 id, MapHolder map)
     {
         Vector3 newID = new Vector3(id.x % map.mapSize.x, id.y, id.z % map.mapSize.z);
         return newID;
     }
+
+    //Get the map that is currently being walked on
     public static Map GetMap(Vector3 id, MapHolder map) 
     {
         Vector2 mapIndex = new Vector2((int)(id.x / map.mapSize.x), (int)(id.z / map.mapSize.z));
@@ -47,6 +56,8 @@ public static class BuildLogic
         Map _Map = map.maps[(int)(mapIndex.x + (map.holderSize.x * mapIndex.y))];
         return _Map;
     }
+
+    //Get the start and end of the tiles being selected since it was a long calculation
     public static Vector3[] GetStart(Vector3 start, Vector3 end)
     {
         Vector3 realStart;
@@ -92,6 +103,8 @@ public static class BuildLogic
 
         return pos;
     }
+
+    //Get the edges of the tiles being selected
     public static List<Tile> GetEdges(Vector3 start, Vector3 end, Tile[,,] list, int height)
     {
         List<Tile> dataList = new List<Tile>();
@@ -110,6 +123,8 @@ public static class BuildLogic
 
         return dataList;
     }
+
+    //Get the middle of the tiles being selected
     public static List<Tile> GetMiddle(Vector3 start, Vector3 end, Tile[,,] list, int height)
     {
         List<Tile> dataList = new List<Tile>();

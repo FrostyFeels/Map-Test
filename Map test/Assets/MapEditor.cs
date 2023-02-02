@@ -25,7 +25,8 @@ public class MapEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0) && info.currentMap.layers.Count != 0)
+
+        if (Input.GetMouseButton(0) && !info.select)
         {
             MapSelecter();
         }
@@ -66,16 +67,12 @@ public class MapEditor : MonoBehaviour
         Vector3 end = startEnd[1];
 
 
-        curMap = BuildLogic.GetMap(start, info.map);
+        
         start = BuildLogic.GetID(start, info.map);
         end = BuildLogic.GetID(end, info.map);
 
-      
-
-        Debug.Log(curMap.gridspot);
-
-        BuildTiles(BuildLogic.GetEdges(start, end, curMap.mapData, viewer.currentLevel));
-        BuildTiles(BuildLogic.GetMiddle(start, end, curMap.mapData, viewer.currentLevel));
+        BuildTiles(BuildLogic.GetEdges(start, end, info.currentMap.mapData, viewer.currentLevel));
+        BuildTiles(BuildLogic.GetMiddle(start, end, info.currentMap.mapData, viewer.currentLevel));
 
 
     }

@@ -48,7 +48,10 @@ public class MapSaved : MonoBehaviour
                 foreach (Tile _Tile in _Layer.tiles)
                 {
                     if (_Tile.selected)
+                    {
+                        _Tile.obj.SetActive(true);
                         BuildLogic.ChangeColor("White", _Tile.renderer);
+                    }                      
                     else
                         _Tile.obj.SetActive(false);
                 }

@@ -47,9 +47,7 @@ public class MapGen : MonoBehaviour
             save.map = map;
             save.CreatePrefab(mapName);
             view.currentLevel = 1;
-            view.ChangeLevel(-1);
-
-            
+            view.ChangeLevel(-1, map.maps);         
         }
     }
 
